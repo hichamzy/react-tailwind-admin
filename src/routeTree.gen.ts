@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
+import { Route as DashboardTeamImport } from './routes/dashboard/team'
 
 // Create Virtual Routes
 
@@ -37,10 +38,22 @@ const AuthLoginLazyRoute = AuthLoginLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/auth/login.lazy').then((d) => d.Route))
 
+const DashboardTeamRoute = DashboardTeamImport.update({
+  path: '/dashboard/team',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/dashboard/team': {
+      id: '/dashboard/team'
+      path: '/dashboard/team'
+      fullPath: '/dashboard/team'
+      preLoaderRoute: typeof DashboardTeamImport
+      parentRoute: typeof rootRoute
+    }
     '/auth/login': {
       id: '/auth/login'
       path: '/auth/login'
@@ -68,6 +81,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren({
+  DashboardTeamRoute,
   AuthLoginLazyRoute,
   AuthRegisterLazyRoute,
   DashboardIndexRoute,
@@ -81,10 +95,14 @@ export const routeTree = rootRoute.addChildren({
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/dashboard/team",
         "/auth/login",
         "/auth/register",
         "/dashboard/"
       ]
+    },
+    "/dashboard/team": {
+      "filePath": "dashboard/team.tsx"
     },
     "/auth/login": {
       "filePath": "auth/login.lazy.tsx"

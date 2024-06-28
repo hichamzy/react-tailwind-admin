@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useSidebarStore } from "@/hooks/useSidebarStore";
 import { classNames } from "@/utils";
 import { Transition, Dialog, TransitionChild, DialogPanel } from "@headlessui/react";
@@ -13,8 +14,8 @@ import {
 } from "@heroicons/react/24/outline";
 
 const navigation = [
-	{ name: "Dashboard", href: "#", icon: HomeIcon, current: true },
-	{ name: "Team", href: "#", icon: UsersIcon, current: false },
+	{ name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
+	{ name: "Team", href: "/dashboard/team", icon: UsersIcon, current: false },
 	{ name: "Projects", href: "#", icon: FolderIcon, current: false },
 	{ name: "Calendar", href: "#", icon: CalendarIcon, current: false },
 	{ name: "Documents", href: "#", icon: DocumentDuplicateIcon, current: false },
@@ -98,8 +99,8 @@ export default function Sidebar() {
 												>
 													{navigation.map((item) => (
 														<li key={item.name}>
-															<a
-																href={item.href}
+															<Link
+																to={item.href}
 																className={classNames(
 																	item.current
 																		? "bg-gray-800 text-white"
@@ -112,7 +113,7 @@ export default function Sidebar() {
 																	aria-hidden="true"
 																/>
 																{item.name}
-															</a>
+															</Link>
 														</li>
 													))}
 												</ul>
@@ -185,8 +186,8 @@ export default function Sidebar() {
 								<ul role="list" className="-mx-2 space-y-1">
 									{navigation.map((item) => (
 										<li key={item.name}>
-											<a
-												href={item.href}
+											<Link
+												to={item.href}
 												className={classNames(
 													item.current
 														? "bg-gray-800 text-white"
@@ -199,7 +200,7 @@ export default function Sidebar() {
 													aria-hidden="true"
 												/>
 												{item.name}
-											</a>
+											</Link>
 										</li>
 									))}
 								</ul>

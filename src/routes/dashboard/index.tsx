@@ -4,9 +4,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/20/solid";
 import { CursorArrowRaysIcon, EnvelopeOpenIcon, UsersIcon } from "@heroicons/react/24/outline";
 import { classNames } from "@/utils";
+import { fetchUsers } from "@/services/users";
 
 export const Route = createFileRoute("/dashboard/")({
 	component: Dashboard,
+	loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(fetchUsers()),
+	errorComponent: () => <div>Error</div>,
+	pendingComponent: () => <div>Loading...</div>,
 });
 
 const stats = [
@@ -36,12 +40,12 @@ const stats = [
 	},
 ];
 
-const people = Array.from({ length: 10 }).map(() => ({
-	name: "Lindsay Walton",
-	title: "Front-end Developer",
-	email: "lindsay.walton@example.com",
-	role: "Member",
-}));
+// const people = Array.from({ length: 10 }).map(() => ({
+// 	name: "Lindsay Walton",
+// 	title: "Front-end Developer",
+// 	email: "lindsay.walton@example.com",
+// 	role: "Member",
+// }));
 
 function StatCards() {
 	return (
@@ -121,6 +125,7 @@ function StatCards() {
 }
 
 function DataTable() {
+	const people = Route.useLoaderData();
 	return (
 		<div className="mt-8">
 			<div className="sm:flex sm:items-center">
@@ -151,25 +156,25 @@ function DataTable() {
 											scope="col"
 											className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
 										>
+											ID
+										</th>
+										<th
+											scope="col"
+											className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+										>
 											Name
 										</th>
 										<th
 											scope="col"
 											className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
 										>
-											Title
+											User Name
 										</th>
 										<th
 											scope="col"
 											className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
 										>
 											Email
-										</th>
-										<th
-											scope="col"
-											className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-										>
-											Role
 										</th>
 										<th
 											scope="col"
@@ -181,18 +186,18 @@ function DataTable() {
 								</thead>
 								<tbody className="divide-y divide-gray-200 bg-white">
 									{people.map((person) => (
-										<tr key={person.email}>
+										<tr key={person.id}>
 											<td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+												{person.id}
+											</td>
+											<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 												{person.name}
 											</td>
 											<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-												{person.title}
+												{person.username}
 											</td>
 											<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 												{person.email}
-											</td>
-											<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-												{person.role}
 											</td>
 											<td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
 												<a
