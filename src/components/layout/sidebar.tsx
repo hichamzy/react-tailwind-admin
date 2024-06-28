@@ -1,3 +1,4 @@
+import { useSidebarStore } from "@/hooks/useSidebarStore";
 import { classNames } from "@/utils";
 import { Transition, Dialog, TransitionChild, DialogPanel } from "@headlessui/react";
 import {
@@ -10,7 +11,6 @@ import {
 	HomeIcon,
 	UsersIcon,
 } from "@heroicons/react/24/outline";
-import { useState } from "react";
 
 const navigation = [
 	{ name: "Dashboard", href: "#", icon: HomeIcon, current: true },
@@ -21,17 +21,17 @@ const navigation = [
 	{ name: "Reports", href: "#", icon: ChartPieIcon, current: false },
 ];
 const teams = [
-	{ id: 1, name: "Heroicons", href: "#", initial: "H", current: false },
+	{ id: 1, name: "Heroicons", href: "#", initial: "H", current: true },
 	{ id: 2, name: "Tailwind Labs", href: "#", initial: "T", current: false },
 	{ id: 3, name: "Workcation", href: "#", initial: "W", current: false },
 ];
 
 export default function Sidebar() {
-	const [sidebarOpen, setSidebarOpen] = useState(false);
+	const store = useSidebarStore();
 	return (
 		<>
-			<Transition show={sidebarOpen}>
-				<Dialog className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
+			<Transition show={store.isOpen}>
+				<Dialog className="relative z-50 lg:hidden" onClose={store.close}>
 					<TransitionChild
 						enter="transition-opacity ease-linear duration-300"
 						enterFrom="opacity-0"
@@ -65,7 +65,7 @@ export default function Sidebar() {
 										<button
 											type="button"
 											className="-m-2.5 p-2.5"
-											onClick={() => setSidebarOpen(false)}
+											onClick={store.close}
 										>
 											<span className="sr-only">
 												Close sidebar
