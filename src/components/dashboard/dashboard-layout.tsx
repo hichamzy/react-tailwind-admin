@@ -1,10 +1,22 @@
 import { PropsWithChildren } from "react";
 import Sidebar from "@/components/layout/sidebar";
 import Header from "@/components/layout/header";
+import { Helmet } from "react-helmet-async";
 
-export default function DashboardLayout({ children }: PropsWithChildren) {
+type Props = {
+	title?: string;
+};
+
+export default function DashboardLayout({
+	children,
+	title = "Dashboard",
+}: PropsWithChildren<Props>) {
 	return (
-		<div>
+		<div className="bg-gray-100/75 min-h-screen">
+			<Helmet>
+				<title>React Admin | {title}</title>
+			</Helmet>
+
 			<Sidebar />
 
 			<div className="lg:pl-72">

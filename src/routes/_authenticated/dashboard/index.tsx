@@ -6,7 +6,7 @@ import { CursorArrowRaysIcon, EnvelopeOpenIcon, UsersIcon } from "@heroicons/rea
 import { classNames } from "@/utils";
 import { fetchUsers } from "@/services/users";
 
-export const Route = createFileRoute("/dashboard/")({
+export const Route = createFileRoute("/_authenticated/dashboard/")({
 	component: Dashboard,
 	loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(fetchUsers()),
 	errorComponent: () => <div>Error</div>,
@@ -39,13 +39,6 @@ const stats = [
 		changeType: "decrease",
 	},
 ];
-
-// const people = Array.from({ length: 10 }).map(() => ({
-// 	name: "Lindsay Walton",
-// 	title: "Front-end Developer",
-// 	email: "lindsay.walton@example.com",
-// 	role: "Member",
-// }));
 
 function StatCards() {
 	return (
@@ -224,7 +217,7 @@ function DataTable() {
 
 function Dashboard() {
 	return (
-		<DashboardLayout>
+		<DashboardLayout title="Dashboard">
 			<StatCards />
 			<DataTable />
 		</DashboardLayout>

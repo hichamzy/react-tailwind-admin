@@ -16,7 +16,7 @@ import {
 const navigation = [
 	{ name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
 	{ name: "Team", href: "/dashboard/team", icon: UsersIcon, current: false },
-	{ name: "Projects", href: "#", icon: FolderIcon, current: false },
+	{ name: "Projects", href: "/dashboard/projects", icon: FolderIcon, current: false },
 	{ name: "Calendar", href: "#", icon: CalendarIcon, current: false },
 	{ name: "Documents", href: "#", icon: DocumentDuplicateIcon, current: false },
 	{ name: "Reports", href: "#", icon: ChartPieIcon, current: false },
@@ -102,11 +102,16 @@ export default function Sidebar() {
 															<Link
 																to={item.href}
 																className={classNames(
-																	item.current
-																		? "bg-gray-800 text-white"
-																		: "text-gray-400 hover:text-white hover:bg-gray-800",
+																	"text-gray-400 hover:text-white hover:bg-gray-800",
 																	"group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
 																)}
+																activeProps={{
+																	className:
+																		"bg-gray-800 text-white",
+																}}
+																activeOptions={{
+																	exact: true,
+																}}
 															>
 																<item.icon
 																	className="h-6 w-6 shrink-0"
@@ -189,11 +194,14 @@ export default function Sidebar() {
 											<Link
 												to={item.href}
 												className={classNames(
-													item.current
-														? "bg-gray-800 text-white"
-														: "text-gray-400 hover:text-white hover:bg-gray-800",
+													"text-gray-400 hover:text-white hover:bg-gray-800",
 													"group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
 												)}
+												activeProps={{
+													className:
+														"bg-gray-800 text-white",
+												}}
+												activeOptions={{ exact: true }}
 											>
 												<item.icon
 													className="h-6 w-6 shrink-0"

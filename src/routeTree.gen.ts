@@ -13,67 +13,114 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as DashboardIndexImport } from './routes/dashboard/index'
-import { Route as DashboardTeamImport } from './routes/dashboard/team'
+import { Route as GuestImport } from './routes/_guest'
+import { Route as AuthenticatedImport } from './routes/_authenticated'
+import { Route as AuthenticatedDashboardIndexImport } from './routes/_authenticated/dashboard/index'
+import { Route as AuthenticatedDashboardTeamImport } from './routes/_authenticated/dashboard/team'
+import { Route as AuthenticatedDashboardProjectsImport } from './routes/_authenticated/dashboard/projects'
 
 // Create Virtual Routes
 
-const AuthRegisterLazyImport = createFileRoute('/auth/register')()
-const AuthLoginLazyImport = createFileRoute('/auth/login')()
+const GuestAuthRegisterLazyImport = createFileRoute('/_guest/auth/register')()
+const GuestAuthLoginLazyImport = createFileRoute('/_guest/auth/login')()
 
 // Create/Update Routes
 
-const DashboardIndexRoute = DashboardIndexImport.update({
-  path: '/dashboard/',
+const GuestRoute = GuestImport.update({
+  id: '/_guest',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthRegisterLazyRoute = AuthRegisterLazyImport.update({
+const AuthenticatedRoute = AuthenticatedImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthenticatedDashboardIndexRoute =
+  AuthenticatedDashboardIndexImport.update({
+    path: '/dashboard/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const GuestAuthRegisterLazyRoute = GuestAuthRegisterLazyImport.update({
   path: '/auth/register',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/auth/register.lazy').then((d) => d.Route))
+  getParentRoute: () => GuestRoute,
+} as any).lazy(() =>
+  import('./routes/_guest/auth/register.lazy').then((d) => d.Route),
+)
 
-const AuthLoginLazyRoute = AuthLoginLazyImport.update({
+const GuestAuthLoginLazyRoute = GuestAuthLoginLazyImport.update({
   path: '/auth/login',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/auth/login.lazy').then((d) => d.Route))
+  getParentRoute: () => GuestRoute,
+} as any).lazy(() =>
+  import('./routes/_guest/auth/login.lazy').then((d) => d.Route),
+)
 
-const DashboardTeamRoute = DashboardTeamImport.update({
-  path: '/dashboard/team',
-  getParentRoute: () => rootRoute,
-} as any)
+const AuthenticatedDashboardTeamRoute = AuthenticatedDashboardTeamImport.update(
+  {
+    path: '/dashboard/team',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any,
+)
+
+const AuthenticatedDashboardProjectsRoute =
+  AuthenticatedDashboardProjectsImport.update({
+    path: '/dashboard/projects',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/dashboard/team': {
-      id: '/dashboard/team'
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedImport
+      parentRoute: typeof rootRoute
+    }
+    '/_guest': {
+      id: '/_guest'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof GuestImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authenticated/dashboard/projects': {
+      id: '/_authenticated/dashboard/projects'
+      path: '/dashboard/projects'
+      fullPath: '/dashboard/projects'
+      preLoaderRoute: typeof AuthenticatedDashboardProjectsImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/dashboard/team': {
+      id: '/_authenticated/dashboard/team'
       path: '/dashboard/team'
       fullPath: '/dashboard/team'
-      preLoaderRoute: typeof DashboardTeamImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedDashboardTeamImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/auth/login': {
-      id: '/auth/login'
+    '/_guest/auth/login': {
+      id: '/_guest/auth/login'
       path: '/auth/login'
       fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof GuestAuthLoginLazyImport
+      parentRoute: typeof GuestImport
     }
-    '/auth/register': {
-      id: '/auth/register'
+    '/_guest/auth/register': {
+      id: '/_guest/auth/register'
       path: '/auth/register'
       fullPath: '/auth/register'
-      preLoaderRoute: typeof AuthRegisterLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof GuestAuthRegisterLazyImport
+      parentRoute: typeof GuestImport
     }
-    '/dashboard/': {
-      id: '/dashboard/'
+    '/_authenticated/dashboard/': {
+      id: '/_authenticated/dashboard/'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedDashboardIndexImport
+      parentRoute: typeof AuthenticatedImport
     }
   }
 }
@@ -81,10 +128,15 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren({
-  DashboardTeamRoute,
-  AuthLoginLazyRoute,
-  AuthRegisterLazyRoute,
-  DashboardIndexRoute,
+  AuthenticatedRoute: AuthenticatedRoute.addChildren({
+    AuthenticatedDashboardProjectsRoute,
+    AuthenticatedDashboardTeamRoute,
+    AuthenticatedDashboardIndexRoute,
+  }),
+  GuestRoute: GuestRoute.addChildren({
+    GuestAuthLoginLazyRoute,
+    GuestAuthRegisterLazyRoute,
+  }),
 })
 
 /* prettier-ignore-end */
@@ -95,23 +147,44 @@ export const routeTree = rootRoute.addChildren({
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/dashboard/team",
-        "/auth/login",
-        "/auth/register",
-        "/dashboard/"
+        "/_authenticated",
+        "/_guest"
       ]
     },
-    "/dashboard/team": {
-      "filePath": "dashboard/team.tsx"
+    "/_authenticated": {
+      "filePath": "_authenticated.ts",
+      "children": [
+        "/_authenticated/dashboard/projects",
+        "/_authenticated/dashboard/team",
+        "/_authenticated/dashboard/"
+      ]
     },
-    "/auth/login": {
-      "filePath": "auth/login.lazy.tsx"
+    "/_guest": {
+      "filePath": "_guest.ts",
+      "children": [
+        "/_guest/auth/login",
+        "/_guest/auth/register"
+      ]
     },
-    "/auth/register": {
-      "filePath": "auth/register.lazy.tsx"
+    "/_authenticated/dashboard/projects": {
+      "filePath": "_authenticated/dashboard/projects.tsx",
+      "parent": "/_authenticated"
     },
-    "/dashboard/": {
-      "filePath": "dashboard/index.tsx"
+    "/_authenticated/dashboard/team": {
+      "filePath": "_authenticated/dashboard/team.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_guest/auth/login": {
+      "filePath": "_guest/auth/login.lazy.tsx",
+      "parent": "/_guest"
+    },
+    "/_guest/auth/register": {
+      "filePath": "_guest/auth/register.lazy.tsx",
+      "parent": "/_guest"
+    },
+    "/_authenticated/dashboard/": {
+      "filePath": "_authenticated/dashboard/index.tsx",
+      "parent": "/_authenticated"
     }
   }
 }
