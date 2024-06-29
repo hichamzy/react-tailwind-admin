@@ -16,8 +16,12 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as GuestImport } from './routes/_guest'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as AuthenticatedDashboardIndexImport } from './routes/_authenticated/dashboard/index'
-import { Route as AuthenticatedDashboardTeamImport } from './routes/_authenticated/dashboard/team'
-import { Route as AuthenticatedDashboardProjectsImport } from './routes/_authenticated/dashboard/projects'
+import { Route as AuthenticatedDashboardTableauIndexImport } from './routes/_authenticated/dashboard/tableau/index'
+import { Route as AuthenticatedDashboardSondagesIndexImport } from './routes/_authenticated/dashboard/sondages/index'
+import { Route as AuthenticatedDashboardNotesIndexImport } from './routes/_authenticated/dashboard/notes/index'
+import { Route as AuthenticatedDashboardCoursIndexImport } from './routes/_authenticated/dashboard/cours/index'
+import { Route as AuthenticatedDashboardClassesIndexImport } from './routes/_authenticated/dashboard/classes/index'
+import { Route as AuthenticatedDashboardAbsencesIndexImport } from './routes/_authenticated/dashboard/absences/index'
 
 // Create Virtual Routes
 
@@ -56,16 +60,39 @@ const GuestAuthLoginLazyRoute = GuestAuthLoginLazyImport.update({
   import('./routes/_guest/auth/login.lazy').then((d) => d.Route),
 )
 
-const AuthenticatedDashboardTeamRoute = AuthenticatedDashboardTeamImport.update(
-  {
-    path: '/dashboard/team',
+const AuthenticatedDashboardTableauIndexRoute =
+  AuthenticatedDashboardTableauIndexImport.update({
+    path: '/dashboard/tableau/',
     getParentRoute: () => AuthenticatedRoute,
-  } as any,
-)
+  } as any)
 
-const AuthenticatedDashboardProjectsRoute =
-  AuthenticatedDashboardProjectsImport.update({
-    path: '/dashboard/projects',
+const AuthenticatedDashboardSondagesIndexRoute =
+  AuthenticatedDashboardSondagesIndexImport.update({
+    path: '/dashboard/sondages/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedDashboardNotesIndexRoute =
+  AuthenticatedDashboardNotesIndexImport.update({
+    path: '/dashboard/notes/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedDashboardCoursIndexRoute =
+  AuthenticatedDashboardCoursIndexImport.update({
+    path: '/dashboard/cours/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedDashboardClassesIndexRoute =
+  AuthenticatedDashboardClassesIndexImport.update({
+    path: '/dashboard/classes/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedDashboardAbsencesIndexRoute =
+  AuthenticatedDashboardAbsencesIndexImport.update({
+    path: '/dashboard/absences/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -86,20 +113,6 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof GuestImport
       parentRoute: typeof rootRoute
-    }
-    '/_authenticated/dashboard/projects': {
-      id: '/_authenticated/dashboard/projects'
-      path: '/dashboard/projects'
-      fullPath: '/dashboard/projects'
-      preLoaderRoute: typeof AuthenticatedDashboardProjectsImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/dashboard/team': {
-      id: '/_authenticated/dashboard/team'
-      path: '/dashboard/team'
-      fullPath: '/dashboard/team'
-      preLoaderRoute: typeof AuthenticatedDashboardTeamImport
-      parentRoute: typeof AuthenticatedImport
     }
     '/_guest/auth/login': {
       id: '/_guest/auth/login'
@@ -122,6 +135,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardIndexImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/dashboard/absences/': {
+      id: '/_authenticated/dashboard/absences/'
+      path: '/dashboard/absences'
+      fullPath: '/dashboard/absences'
+      preLoaderRoute: typeof AuthenticatedDashboardAbsencesIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/dashboard/classes/': {
+      id: '/_authenticated/dashboard/classes/'
+      path: '/dashboard/classes'
+      fullPath: '/dashboard/classes'
+      preLoaderRoute: typeof AuthenticatedDashboardClassesIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/dashboard/cours/': {
+      id: '/_authenticated/dashboard/cours/'
+      path: '/dashboard/cours'
+      fullPath: '/dashboard/cours'
+      preLoaderRoute: typeof AuthenticatedDashboardCoursIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/dashboard/notes/': {
+      id: '/_authenticated/dashboard/notes/'
+      path: '/dashboard/notes'
+      fullPath: '/dashboard/notes'
+      preLoaderRoute: typeof AuthenticatedDashboardNotesIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/dashboard/sondages/': {
+      id: '/_authenticated/dashboard/sondages/'
+      path: '/dashboard/sondages'
+      fullPath: '/dashboard/sondages'
+      preLoaderRoute: typeof AuthenticatedDashboardSondagesIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/dashboard/tableau/': {
+      id: '/_authenticated/dashboard/tableau/'
+      path: '/dashboard/tableau'
+      fullPath: '/dashboard/tableau'
+      preLoaderRoute: typeof AuthenticatedDashboardTableauIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
   }
 }
 
@@ -129,9 +184,13 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   AuthenticatedRoute: AuthenticatedRoute.addChildren({
-    AuthenticatedDashboardProjectsRoute,
-    AuthenticatedDashboardTeamRoute,
     AuthenticatedDashboardIndexRoute,
+    AuthenticatedDashboardAbsencesIndexRoute,
+    AuthenticatedDashboardClassesIndexRoute,
+    AuthenticatedDashboardCoursIndexRoute,
+    AuthenticatedDashboardNotesIndexRoute,
+    AuthenticatedDashboardSondagesIndexRoute,
+    AuthenticatedDashboardTableauIndexRoute,
   }),
   GuestRoute: GuestRoute.addChildren({
     GuestAuthLoginLazyRoute,
@@ -154,9 +213,13 @@ export const routeTree = rootRoute.addChildren({
     "/_authenticated": {
       "filePath": "_authenticated.ts",
       "children": [
-        "/_authenticated/dashboard/projects",
-        "/_authenticated/dashboard/team",
-        "/_authenticated/dashboard/"
+        "/_authenticated/dashboard/",
+        "/_authenticated/dashboard/absences/",
+        "/_authenticated/dashboard/classes/",
+        "/_authenticated/dashboard/cours/",
+        "/_authenticated/dashboard/notes/",
+        "/_authenticated/dashboard/sondages/",
+        "/_authenticated/dashboard/tableau/"
       ]
     },
     "/_guest": {
@@ -165,14 +228,6 @@ export const routeTree = rootRoute.addChildren({
         "/_guest/auth/login",
         "/_guest/auth/register"
       ]
-    },
-    "/_authenticated/dashboard/projects": {
-      "filePath": "_authenticated/dashboard/projects.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/dashboard/team": {
-      "filePath": "_authenticated/dashboard/team.tsx",
-      "parent": "/_authenticated"
     },
     "/_guest/auth/login": {
       "filePath": "_guest/auth/login.lazy.tsx",
@@ -184,6 +239,30 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_authenticated/dashboard/": {
       "filePath": "_authenticated/dashboard/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/dashboard/absences/": {
+      "filePath": "_authenticated/dashboard/absences/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/dashboard/classes/": {
+      "filePath": "_authenticated/dashboard/classes/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/dashboard/cours/": {
+      "filePath": "_authenticated/dashboard/cours/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/dashboard/notes/": {
+      "filePath": "_authenticated/dashboard/notes/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/dashboard/sondages/": {
+      "filePath": "_authenticated/dashboard/sondages/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/dashboard/tableau/": {
+      "filePath": "_authenticated/dashboard/tableau/index.tsx",
       "parent": "/_authenticated"
     }
   }

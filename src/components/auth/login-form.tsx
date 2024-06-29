@@ -21,8 +21,9 @@ export default function LoginForm() {
 
 	const { mutate, isPending, error } = useMutation({
 		mutationFn: login,
-		onSuccess: () => {
+		onSuccess: (data) => {
 			localStorage.setItem("isAuthenticated", "true");
+			console.log(data);
 
 			if (search.redirect) {
 				navigate({ to: search.redirect });

@@ -35,7 +35,7 @@ const navigation = [
 	},
 	{ name: "Mes cours", href: "/dashboard/cours", icon: BookOpenIcon },
 	{ name: "Sondages", href: "/dashboard/sondages", icon: ChartBarIcon },
-	{ name: "Tableau de bord", href: "/dashboard/table", icon: ChartPieIcon },
+	{ name: "Tableau de bord", href: "/dashboard/tableau", icon: ChartPieIcon },
 ];
 
 export default function Sidebar() {

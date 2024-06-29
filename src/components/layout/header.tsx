@@ -1,6 +1,6 @@
 import { classNames } from "@/utils";
 import { Menu, MenuButton, Transition, MenuItems, MenuItem } from "@headlessui/react";
-import { Bars3Icon, BellIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, BellIcon, SignalSlashIcon, SunIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { useSidebarStore } from "@/hooks/useSidebarStore";
 
@@ -47,8 +47,22 @@ export default function Header() {
 						type="button"
 						className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
 					>
+						<span className="sr-only">You are offline</span>
+						<SignalSlashIcon className="h-6 w-6" aria-hidden="true" />
+					</button>
+					<button
+						type="button"
+						className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+					>
 						<span className="sr-only">View notifications</span>
 						<BellIcon className="h-6 w-6" aria-hidden="true" />
+					</button>
+					<button
+						type="button"
+						className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+					>
+						<span className="sr-only">Light mode</span>
+						<SunIcon className="h-6 w-6" aria-hidden="true" />
 					</button>
 
 					{/* Separator */}
