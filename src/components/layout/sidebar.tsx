@@ -1,34 +1,47 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { useSidebarStore } from "@/hooks/useSidebarStore";
 import { classNames } from "@/utils";
-import { Transition, Dialog, TransitionChild, DialogPanel } from "@headlessui/react";
+import {
+	Transition,
+	Dialog,
+	TransitionChild,
+	DialogPanel,
+	Disclosure,
+	DisclosureButton,
+	DisclosurePanel,
+} from "@headlessui/react";
 import {
 	XMarkIcon,
 	Cog6ToothIcon,
-	CalendarIcon,
-	ChartPieIcon,
-	DocumentDuplicateIcon,
-	FolderIcon,
 	HomeIcon,
 	UsersIcon,
+	AcademicCapIcon,
+	BookOpenIcon,
+	ChartBarIcon,
+	ChartPieIcon,
 } from "@heroicons/react/24/outline";
+import { ChevronRightIcon } from "@heroicons/react/20/solid";
 
 const navigation = [
-	{ name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
-	{ name: "Team", href: "/dashboard/team", icon: UsersIcon, current: false },
-	{ name: "Projects", href: "/dashboard/projects", icon: FolderIcon, current: false },
-	{ name: "Calendar", href: "#", icon: CalendarIcon, current: false },
-	{ name: "Documents", href: "#", icon: DocumentDuplicateIcon, current: false },
-	{ name: "Reports", href: "#", icon: ChartPieIcon, current: false },
-];
-const teams = [
-	{ id: 1, name: "Heroicons", href: "#", initial: "H", current: true },
-	{ id: 2, name: "Tailwind Labs", href: "#", initial: "T", current: false },
-	{ id: 3, name: "Workcation", href: "#", initial: "W", current: false },
+	{ name: "Acceuil", href: "/dashboard", icon: HomeIcon },
+	{ name: "Mes classes", href: "/dashboard/classes", icon: UsersIcon },
+	{
+		name: "Ma gestion schoolaire",
+		icon: AcademicCapIcon,
+		children: [
+			{ name: "Absences des mes élèves", href: "/dashboard/absences" },
+			{ name: "Mes notes", href: "/dashboard/notes" },
+		],
+	},
+	{ name: "Mes cours", href: "/dashboard/cours", icon: BookOpenIcon },
+	{ name: "Sondages", href: "/dashboard/sondages", icon: ChartBarIcon },
+	{ name: "Tableau de bord", href: "/dashboard/table", icon: ChartPieIcon },
 ];
 
 export default function Sidebar() {
 	const store = useSidebarStore();
+	const { pathname } = useLocation();
+
 	return (
 		<>
 			<Transition show={store.isOpen}>
@@ -99,56 +112,112 @@ export default function Sidebar() {
 												>
 													{navigation.map((item) => (
 														<li key={item.name}>
-															<Link
-																to={item.href}
-																className={classNames(
-																	"text-gray-400 hover:text-white hover:bg-gray-800",
-																	"group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-																)}
-																activeProps={{
-																	className:
-																		"bg-gray-800 text-white",
-																}}
-																activeOptions={{
-																	exact: true,
-																}}
-															>
-																<item.icon
-																	className="h-6 w-6 shrink-0"
-																	aria-hidden="true"
-																/>
-																{item.name}
-															</Link>
-														</li>
-													))}
-												</ul>
-											</li>
-											<li>
-												<div className="text-xs font-semibold leading-6 text-gray-400">
-													Your teams
-												</div>
-												<ul
-													role="list"
-													className="-mx-2 mt-2 space-y-1"
-												>
-													{teams.map((team) => (
-														<li key={team.name}>
-															<a
-																href={team.href}
-																className={classNames(
-																	team.current
-																		? "bg-gray-800 text-white"
-																		: "text-gray-400 hover:text-white hover:bg-gray-800",
-																	"group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-																)}
-															>
-																<span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-																	{team.initial}
-																</span>
-																<span className="truncate">
-																	{team.name}
-																</span>
-															</a>
+															{!item.children ? (
+																<Link
+																	to={item.href}
+																	className={classNames(
+																		item.href ===
+																			pathname
+																			? "bg-gray-800 text-white"
+																			: "text-gray-400 hover:text-white hover:bg-gray-800",
+																		"group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+																	)}
+																>
+																	<item.icon
+																		className="h-6 w-6 shrink-0"
+																		aria-hidden="true"
+																	/>
+																	{item.name}
+																</Link>
+															) : (
+																<Disclosure
+																	as="div"
+																	defaultOpen={item.children.some(
+																		(i) =>
+																			i.href ===
+																			pathname
+																	)}
+																>
+																	{({
+																		open,
+																	}) => (
+																		<>
+																			<DisclosureButton
+																				className={classNames(
+																					item.children.some(
+																						(
+																							i
+																						) =>
+																							i.href ===
+																							pathname
+																					)
+																						? "bg-gray-800 text-white"
+																						: "text-gray-400 hover:text-white hover:bg-gray-800",
+																					"flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold"
+																				)}
+																			>
+																				<item.icon
+																					className="h-6 w-6 shrink-0"
+																					aria-hidden="true"
+																				/>
+																				{
+																					item.name
+																				}
+																				<ChevronRightIcon
+																					className={classNames(
+																						open
+																							? "rotate-90 text-gray-300"
+																							: "text-gray-400",
+																						"ml-auto h-5 w-5 shrink-0"
+																					)}
+																					aria-hidden="true"
+																				/>
+																			</DisclosureButton>
+																			<DisclosurePanel
+																				as="ul"
+																				transition
+																				className="mt-1 px-2 origin-top transition duration-200 ease-out data-[closed]:-translate-y-6 data-[closed]:opacity-0"
+																			>
+																				{item.children.map(
+																					(
+																						subItem
+																					) => (
+																						<li
+																							key={
+																								subItem.name
+																							}
+																						>
+																							<DisclosureButton
+																								as={
+																									Link
+																								}
+																								to={
+																									subItem.href
+																								}
+																								className={classNames(
+																									"text-gray-400 hover:text-white hover:bg-gray-800",
+																									"block rounded-md py-2 pr-2 pl-9 text-sm leading-6"
+																								)}
+																								activeProps={{
+																									className:
+																										"bg-gray-800 text-white",
+																								}}
+																								activeOptions={{
+																									exact: true,
+																								}}
+																							>
+																								{
+																									subItem.name
+																								}
+																							</DisclosureButton>
+																						</li>
+																					)
+																				)}
+																			</DisclosurePanel>
+																		</>
+																	)}
+																</Disclosure>
+															)}
 														</li>
 													))}
 												</ul>
@@ -191,51 +260,101 @@ export default function Sidebar() {
 								<ul role="list" className="-mx-2 space-y-1">
 									{navigation.map((item) => (
 										<li key={item.name}>
-											<Link
-												to={item.href}
-												className={classNames(
-													"text-gray-400 hover:text-white hover:bg-gray-800",
-													"group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-												)}
-												activeProps={{
-													className:
-														"bg-gray-800 text-white",
-												}}
-												activeOptions={{ exact: true }}
-											>
-												<item.icon
-													className="h-6 w-6 shrink-0"
-													aria-hidden="true"
-												/>
-												{item.name}
-											</Link>
-										</li>
-									))}
-								</ul>
-							</li>
-							<li>
-								<div className="text-xs font-semibold leading-6 text-gray-400">
-									Your teams
-								</div>
-								<ul role="list" className="-mx-2 mt-2 space-y-1">
-									{teams.map((team) => (
-										<li key={team.name}>
-											<a
-												href={team.href}
-												className={classNames(
-													team.current
-														? "bg-gray-800 text-white"
-														: "text-gray-400 hover:text-white hover:bg-gray-800",
-													"group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-												)}
-											>
-												<span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-													{team.initial}
-												</span>
-												<span className="truncate">
-													{team.name}
-												</span>
-											</a>
+											{!item.children ? (
+												<Link
+													to={item.href}
+													className={classNames(
+														item.href === pathname
+															? "bg-gray-800 text-white"
+															: "text-gray-400 hover:text-white hover:bg-gray-800",
+														"group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+													)}
+												>
+													<item.icon
+														className="h-6 w-6 shrink-0"
+														aria-hidden="true"
+													/>
+													{item.name}
+												</Link>
+											) : (
+												<Disclosure
+													as="div"
+													defaultOpen={item.children.some(
+														(i) => i.href === pathname
+													)}
+												>
+													{({ open }) => (
+														<>
+															<DisclosureButton
+																className={classNames(
+																	item.children.some(
+																		(i) =>
+																			i.href ===
+																			pathname
+																	)
+																		? "bg-gray-800 text-white"
+																		: "text-gray-400 hover:text-white hover:bg-gray-800",
+																	"flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold"
+																)}
+															>
+																<item.icon
+																	className="h-6 w-6 shrink-0"
+																	aria-hidden="true"
+																/>
+																{item.name}
+																<ChevronRightIcon
+																	className={classNames(
+																		open
+																			? "rotate-90 text-gray-300"
+																			: "text-gray-400",
+																		"ml-auto h-5 w-5 shrink-0"
+																	)}
+																	aria-hidden="true"
+																/>
+															</DisclosureButton>
+															<DisclosurePanel
+																as="ul"
+																transition
+																className="mt-1 px-2 origin-top transition duration-200 ease-out data-[closed]:-translate-y-6 data-[closed]:opacity-0"
+															>
+																{item.children.map(
+																	(subItem) => (
+																		<li
+																			key={
+																				subItem.name
+																			}
+																		>
+																			<DisclosureButton
+																				as={
+																					Link
+																				}
+																				to={
+																					subItem.href
+																				}
+																				className={classNames(
+																					"text-gray-400 hover:text-white hover:bg-gray-800",
+																					"block rounded-md py-2 pr-2 pl-9 text-sm leading-6"
+																				)}
+																				activeProps={{
+																					className:
+																						"bg-gray-800 text-white",
+																				}}
+																				activeOptions={{
+																					exact: true,
+																				}}
+																			>
+																				{
+																					subItem.name
+																				}
+																			</DisclosureButton>
+																		</li>
+																	)
+																)}
+															</DisclosurePanel>
+														</>
+													)}
+												</Disclosure>
+											)}
 										</li>
 									))}
 								</ul>
