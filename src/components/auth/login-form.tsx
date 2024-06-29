@@ -16,7 +16,7 @@ export default function LoginForm() {
 		defaultValues: { email: "", password: "" },
 	});
 
-	const search: Record<string, string> = useSearch({ from: "/auth/login" });
+	const search: Record<string, string> = useSearch({ from: "/_guest/auth/login" });
 	const navigate = useNavigate();
 
 	const { mutate, isPending, error } = useMutation({
