@@ -92,11 +92,12 @@ export default function Sidebar() {
 									</div>
 								</TransitionChild>
 								{/* Sidebar component, swap this element with another sidebar if you like */}
-								<div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
-									<div className="flex h-16 shrink-0 items-center">
+								<div className="flex grow flex-col gap-y-5 overflow-y-auto bg-blue-800 px-6 pb-4 ring-1 ring-white/10">
+									<div className="flex h-16 shrink-0  justify-stretch items-center flex-col">
 										<img
+										style={{ height: "45px" , width: "auto",margin:"10px"}}
 											className="h-8 w-auto"
-											src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+											src="../public/media/logos/logo.svg"
 											alt="Your Company"
 										/>
 									</div>
@@ -246,11 +247,12 @@ export default function Sidebar() {
 			{/* Static sidebar for desktop */}
 			<div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
 				{/* Sidebar component, swap this element with another sidebar if you like */}
-				<div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
-					<div className="flex h-16 shrink-0 items-center">
+				<div className="flex grow flex-col gap-y-5 overflow-y-auto bg-blue-800 px-6 pb-4">
+					<div className="flex h-16 shrink-0 justify-stretch items-center flex-col h-45px m-22">
 						<img
-							className="h-8 w-auto"
-							src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+							style={{ height: "45px" , width: "auto",margin:"10px"}}
+							className="h-8 w-auto "
+							src="../public/media/logos/logo.svg"
 							alt="Your Company"
 						/>
 					</div>
@@ -265,8 +267,8 @@ export default function Sidebar() {
 													to={item.href}
 													className={classNames(
 														item.href === pathname
-															? "bg-gray-800 text-white"
-															: "text-gray-400 hover:text-white hover:bg-gray-800",
+															? " text-white"
+															: "text-gray-400 hover:text-white",
 														"group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
 													)}
 												>
@@ -292,8 +294,8 @@ export default function Sidebar() {
 																			i.href ===
 																			pathname
 																	)
-																		? "bg-gray-800 text-white"
-																		: "text-gray-400 hover:text-white hover:bg-gray-800",
+																		? " text-white"
+																		: "text-gray-400 hover:text-white",
 																	"flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold"
 																)}
 															>

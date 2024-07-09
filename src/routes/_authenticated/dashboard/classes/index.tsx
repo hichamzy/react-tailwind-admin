@@ -215,6 +215,7 @@ function Classes() {
         <PageHeading />
         <SearchFilterCard />
         <CoursesCards />
+        <CoursesCards />
       </div>
     </DashboardLayout>
   );

@@ -37,7 +37,7 @@ export default function LoginForm() {
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} method="POST" className="space-y-6">
+		<form onSubmit={handleSubmit(onSubmit)} method="POST" className="space-y-6 m-45" style={{margin:"45px"}}>
 			{error && error.message && <AlertError message={error.message} />}
 			<div>
 				<label
